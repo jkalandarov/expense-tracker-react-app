@@ -12,10 +12,13 @@ const expenses = [
 ];
 
 function App() {
+  const handleAddExpense = expense => {
+    console.log(expense);
+  }
   return (
     <div className="App">
       <h2>Expense Tracker</h2>
-      <NewExpense />
+      <NewExpense onAddExpense={handleAddExpense}/>
       <Expenses items={expenses} />
     </div>
   );
