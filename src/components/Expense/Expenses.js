@@ -4,11 +4,18 @@ import ExpenseItem from './ExpenseItem';
 import ExpenseFilter from './ExpenseFilter';
 
 function Expenses(props) {
-  const [ filteredYear, setFilteredYear ] = useState('2023');
+  const [ filteredYear, setFilteredYear ] = useState('All');
   
   const handleFilterChange = selectedYear => {
     setFilteredYear(selectedYear);
   }
+
+  const itemsToDisplay = filteredYear === 'All' 
+    ? props.items.map(item => <ExpenseItem key={item.id} date={item.date} name={item.name} amount={item.amount} />)
+    : props.items.filter(item => item.date.getFullYear().toString() === filteredYear)
+      .map(item => <ExpenseItem key={item.id} date={item.date} name={item.name} amount={item.amount} />);
+
+  const noExpenseFound = <p>No expense found</p>
 
   return (
     <div className='expenses'>
@@ -16,13 +23,7 @@ function Expenses(props) {
         onChangeFilter={handleFilterChange} 
         selectedYear={filteredYear}
       />
-      {props.items.map(item => (
-        <ExpenseItem 
-          date={item.date} 
-          name={item.name} 
-          amount={item.amount}
-        />)
-      )}
+      {itemsToDisplay.length === 0 ? noExpenseFound : itemsToDisplay}
     </div>
   )
 }
